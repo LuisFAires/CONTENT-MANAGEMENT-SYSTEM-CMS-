@@ -15,7 +15,7 @@
         if(move_uploaded_file($file['tmp_name'], $path.$img)){
             print "<span class='colorGreen'>imagem movida com sucesso</span><br>";
         }else{
-            print "<span class='colorRed'>erro no mover imagem de</span><br>";
+            print "<span class='colorRed'>erro no mover imagem</span><br>";
             return false;
         }
         $array = [
