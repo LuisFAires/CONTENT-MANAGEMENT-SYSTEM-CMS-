@@ -6,4 +6,4 @@ INSLATAÇÃO
 
 3. Importe o arquivo "site.sql" para seu banco de dados.
 
-4. Acesse o endereço "/admin" com usuário "admin" e senha "admin" para editar as informação do site e fazer postagens.
+4. Acesse o endereço "/admin" com usuário "admin" e senha "admin" para editar as informações do site e fazer postagens.
