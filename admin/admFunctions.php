@@ -84,7 +84,6 @@
         $sql = "insert into mensagens (titulo, texto, img, imgbg, cor1, cor2) values ('$titulo','$texto','$img','$imgbg','$cor1','$cor2')";
         mysqli_query($connection, $sql);
         $affected_row = mysqli_affected_rows($connection);
-        echo $sql;
         echo mysqli_error($connection);
         if($affected_row == 1){
             print "<span class='colorGreen'>Registro efetuado com sucesso!</span>";
