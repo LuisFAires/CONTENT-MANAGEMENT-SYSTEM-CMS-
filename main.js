@@ -15,15 +15,7 @@ ativaNoScroll()
 window.addEventListener('scroll', ativaNoScroll);
 
 //LAZY-LOAD FEED
-var scrollInterval = setInterval(() => {
-    var articles = document.getElementsByClassName('round')
-    if(articles.length != 0 ){
-        var lastArticle = articles[articles.length-1];
-        if(lastArticle.getBoundingClientRect().bottom < 5000){       
-            imprimeMensagem();
-        }
-    }
-}, 1000);
+var scrollInterval = setInterval(lazyFeed, 1000);
 
 //VERIFICA SE O USÚARIO ACEITOU TERMOS
 if(getCookie("aceite") === "true"){
@@ -37,6 +29,15 @@ document.onclick = function(){
     aceite.style = "display: none;"
 }
 
+function lazyFeed(){
+    var articles = document.getElementsByClassName('round')
+    if(articles.length != 0 ){
+        var lastArticle = articles[articles.length-1];
+        if(lastArticle.getBoundingClientRect().bottom < 5000){       
+            imprimeMensagem();
+        }
+    }
+}
 
 //Verifica se há algum parâmetro para pesquisa, se sim realiza a pesquisa, após carrega o feed com as demais mensagens.
 async function verificaSearch(){
@@ -63,11 +64,13 @@ async function imprimeMensagem(){
     lastSent = mensagemI
     mensagemI++;
     let pede = await fetch("/feed.php",  {method: "POST", headers: {'Content-Type': 'application/json;charset=utf-8'}, body: mensagemI});
+    clearInterval(scrollInterval);
     let recebido = await pede.text();
     if(recebido == ""){
-        clearInterval(scrollInterval);
+        return;
     }
-    principal.innerHTML = principal.innerHTML + recebido;         
+    principal.innerHTML = principal.innerHTML + recebido;
+    scrollInterval = setInterval(lazyFeed, 1000);
     ativaNoScroll();
 
     var anuncios = document.getElementsByClassName("adsbygoogle").length;
