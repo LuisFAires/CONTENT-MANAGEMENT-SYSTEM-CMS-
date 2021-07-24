@@ -15,7 +15,7 @@ ativaNoScroll()
 window.addEventListener('scroll', ativaNoScroll);
 
 //LAZY-LOAD FEED
-var scrollInterval = setInterval(lazyFeed, 1000);
+var scrollInterval = setInterval(lazyFeed, 2500);
 
 //VERIFICA SE O USÚARIO ACEITOU TERMOS
 if(getCookie("aceite") === "true"){
@@ -30,11 +30,19 @@ document.onclick = function(){
 }
 
 function lazyFeed(){
+    if(isItEnding() == true){
+        imprimeMensagem();
+    }
+}
+
+function isItEnding(){
     var articles = document.getElementsByClassName('round')
     if(articles.length != 0 ){
         var lastArticle = articles[articles.length-1];
         if(lastArticle.getBoundingClientRect().bottom < 5000){       
-            imprimeMensagem();
+            return true;
+        }else{
+            return false;
         }
     }
 }
@@ -55,6 +63,9 @@ async function verificaSearch(){
 
 //CARREGA O FEED CONFORME O SCROLL DO USÚARIO
 async function imprimeMensagem(){
+    
+    clearInterval(scrollInterval);
+
     //Corrige o valor da variavel mensagemI quando o servidor demora para responder e o valor é incrementado de forma desnecessária
     if(mensagemI > lastSent+1){
         mensagemI = lastSent+1;
@@ -63,21 +74,27 @@ async function imprimeMensagem(){
 
     lastSent = mensagemI
     mensagemI++;
-    let pede = await fetch("/feed.php",  {method: "POST", headers: {'Content-Type': 'application/json;charset=utf-8'}, body: mensagemI});
-    clearInterval(scrollInterval);
-    let recebido = await pede.text();
-    if(recebido == ""){
-        return;
-    }
-    principal.innerHTML = principal.innerHTML + recebido;
-    scrollInterval = setInterval(lazyFeed, 1000);
-    ativaNoScroll();
-
-    var anuncios = document.getElementsByClassName("adsbygoogle").length;
-    while(anuncios-1 > anunciosImpressos){
-        (adsbygoogle = window.adsbygoogle || []).push({});
-        anunciosImpressos++;
-    }
+    fetch("/feed.php",  {method: "POST", headers: {'Content-Type': 'application/json;charset=utf-8'}, body: mensagemI}).then(function(response) {
+        response.text()
+        .then(function(result) {
+            if(result == ""){
+                return;
+            }else{
+                
+                principal.innerHTML = principal.innerHTML + result;
+                ativaNoScroll();
+        
+                var anuncios = document.getElementsByClassName("adsbygoogle").length;
+                while(anuncios-1 > anunciosImpressos){
+                    (adsbygoogle = window.adsbygoogle || []).push({});
+                    anunciosImpressos++;
+                }
+                
+                scrollInterval = setInterval(lazyFeed, 2500);
+            
+            }
+        })
+    })    
 }
 
 //CARREGA IMAGENS CONFORME SCROLL DO USÚARIO
