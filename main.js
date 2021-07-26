@@ -15,7 +15,7 @@ ativaNoScroll()
 window.addEventListener('scroll', ativaNoScroll);
 
 //LAZY-LOAD FEED
-var scrollInterval = setInterval(lazyFeed, 2500);
+var scrollInterval = setInterval(lazyFeed, 1000);
 
 //VERIFICA SE O USÚARIO ACEITOU TERMOS
 if(getCookie("aceite") === "true"){
@@ -79,19 +79,17 @@ async function imprimeMensagem(){
         .then(function(result) {
             if(result == ""){
                 return;
-            }else{
+            }
                 
-                principal.innerHTML = principal.innerHTML + result;
-                ativaNoScroll();
-        
-                var anuncios = document.getElementsByClassName("adsbygoogle").length;
-                while(anuncios-1 > anunciosImpressos){
-                    (adsbygoogle = window.adsbygoogle || []).push({});
-                    anunciosImpressos++;
-                }
-                
-                scrollInterval = setInterval(lazyFeed, 2500);
-            
+            principal.innerHTML = principal.innerHTML + result;
+            ativaNoScroll();
+
+            scrollInterval = setInterval(lazyFeed(), 1000);
+    
+            var anuncios = document.getElementsByClassName("adsbygoogle").length;
+            while(anuncios-1 > anunciosImpressos){
+                (adsbygoogle = window.adsbygoogle || []).push({});
+                anunciosImpressos++;
             }
         })
     })    

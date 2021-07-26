@@ -27,6 +27,7 @@
     //Imprime o resultado tanto quando o usuário faz pesquisa ou entra na pagina inicial
     function imprimeResultado($result, $ad){
         //IMPRESSÃO DOS RESULTADOS
+        $impressos = 0;
         while($row = mysqli_fetch_assoc($result)){
             $url = $_SERVER['HTTP_HOST']."/mensagem.php?id=".$row['id']."&titulo=".urlencode($row['titulo']);
             $href = "./mensagem.php?id=".$row['id']."&titulo=".urlencode($row['titulo']);
@@ -56,7 +57,9 @@
                         echo"   <span class='counter float'></span>
                     </div>
                 </article>";
-            if($ad != ""){
+                $impressos++;
+            if($ad != "" && $impressos == 5){
+                $impressos = 0;
                 echo "<br><div class='center'>".$ad."</div><br>";
             }
         }
