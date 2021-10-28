@@ -1,4 +1,7 @@
 <?php
+    if($_SERVER['REQUEST_URI'] == "/connection.php"){
+        header("location: /index.php");
+    }
     $hostname = "localhost";
     $user = "root";
     $password = "";
@@ -9,7 +12,4 @@
     if(!$connection){
         print "<p class='text colorRed' >Falha na conexão com banco de dados.</p>";
         Die();
-    }
-    if($_SERVER['REQUEST_URI'] == "/connection.php"){
-        header("location: /index.php");
     }

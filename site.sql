@@ -54,7 +54,7 @@ CREATE TABLE `mensagens` (
 --
 
 INSERT INTO `mensagens` (`id`, `titulo`, `texto`, `img`, `imgbg`, `cor1`, `cor2`) VALUES
-(0, 'Tistulo da postagem', 'Texto Texto Texto Texto Texto Texto Texto Texto Texto Texto Texto Texto Texto Texto Texto Texto Texto Texto Texto Texto Texto Texto Texto Texto Texto Texto Texto Texto Texto Texto Texto Texto Texto Texto Texto Texto Texto ', '', '', '#ffffff', '#00ff00');
+(0, 'Título da postagem', 'Texto Texto Texto Texto Texto Texto Texto Texto Texto Texto Texto Texto Texto Texto Texto Texto Texto Texto Texto Texto Texto Texto Texto Texto Texto Texto Texto Texto Texto Texto Texto Texto Texto Texto Texto Texto Texto ', '', '', '#ffffff', '#00ff00');
 
 -- --------------------------------------------------------
 

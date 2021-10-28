@@ -32,7 +32,6 @@
         </div>
     </div>
 </article>
-<div id="principal"></div>
 <?php
     require_once "footer.php";
 ?>

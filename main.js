@@ -7,6 +7,8 @@ var anunciosImpressos = 0;
 var principal = document.getElementById("principal");
 if(principal != null){
     verificaSearch()
+}else{
+    (adsbygoogle = window.adsbygoogle || []).push({});
 }
 
 
