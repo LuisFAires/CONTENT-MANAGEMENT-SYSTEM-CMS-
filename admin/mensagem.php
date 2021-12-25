@@ -13,7 +13,6 @@
         $imgbg = $result['imgbg'];
         $cor1 = $result['cor1'];
         $cor2 = $result['cor2'];
-        $inversocor1 = color_inverse($cor1);
     }else{
         echo "<br><b>   Registro não encontrado ou excluido</b><br>";
         echo '<a href="./"><button class="cornerButton ">Voltar</button></a>';

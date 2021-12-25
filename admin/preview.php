@@ -3,26 +3,25 @@
     require_once "../functions.php";
     require_once "./admFunctions.php";
 
-    $titulo = $_POST['titulo'];
-    $texto = $_POST['texto'];
-    $cor1 = $_POST['cor1'];
-    $cor2 = $_POST['cor2'];
-    $inversocor1 = color_inverse($cor1);
+    $rows = [];
+    $rows[0]['titulo'] = $_POST['titulo'];
+    $rows[0]['texto'] = $_POST['texto'];
+    $rows[0]['cor1'] = $_POST['cor1'];
+    $rows[0]['cor2'] = $_POST['cor2'];
     if(isset($_POST['choiceimg']) && $_POST['choiceimg'] == "Alterar"){
-        $img = "../img/".$_POST['img'];
+        $rows[0]['img'] = $_POST['img'];
     }else{
-        $img = fileUpload($_FILES['img'], "./temp/");
-        $img = $img['path'].$img['img'];
+        $rows[0]['img'] = fileUpload($_FILES['img'], "./temp/");
+        $rows[0]['img'] = $img['path'].$img['img'];
     }
     if(isset($_POST['choiceimgbg']) && $_POST['choiceimgbg'] == "Alterar"){
-        $imgbg = "../imgbg/".$_POST['imgbg'];
+        $rows[0]['imgbg'] = $_POST['imgbg'];
     }else{
-        $imgbg = fileUpload($_FILES['imgbg'], "./temp/");
-        $imgbg = $imgbg['path'].$imgbg['img'];
+        $rows[0]['imgbg'] = fileUpload($_FILES['imgbg'], "./temp/");
+        $rows[0]['imgbg'] = $imgbg['path'].$imgbg['img'];
     }
 
-    require_once "../view.php";
-    
+    require_once "../view.php";    
     
     $path = "./temp/";
     $diretorio = dir($path);

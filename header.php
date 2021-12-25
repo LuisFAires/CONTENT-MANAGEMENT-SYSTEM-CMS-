@@ -55,6 +55,9 @@ get_client_ip($connection);
     <link rel="stylesheet" type="text/css" href="../style.css">
     <link rel="icon" href="/icon/<?php echo $Logo?>">
     <?php echo $head; ?>
+    <script>
+        let ad = <?php echo json_encode($ad); ?>;
+    </script>
 </head>
 <body>
 
