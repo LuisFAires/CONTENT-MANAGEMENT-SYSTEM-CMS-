@@ -3,14 +3,14 @@ ativaNoScroll();
 window.addEventListener('scroll', ativaNoScroll);
 function ativaNoScroll() {  
     document.querySelectorAll('img').forEach((img, index) => {
-        if(img.getBoundingClientRect().top < window.innerHeight+3000 && img.getBoundingClientRect().top > -3000) {
+        if(img.getBoundingClientRect().top < window.innerHeight+5000 && img.getBoundingClientRect().top > -5000) {
             img.src = img.getAttribute('data-src');
         }
     })
     
     var round = document.getElementsByClassName('round')
     for(var i = 0; i < round.length; i++){
-        if(round[i].getBoundingClientRect().top < window.innerHeight+3000 && round[i].getBoundingClientRect().top > -3000) {
+        if(round[i].getBoundingClientRect().top < window.innerHeight+5000 && round[i].getBoundingClientRect().top > -5000) {
             round[i].style = round[i].getAttribute('data-style');
         }
     }
@@ -211,7 +211,7 @@ function isItEnding(){
     var articles = document.getElementsByClassName('round')
     if(articles.length != 0 ){
         var lastArticle = articles[articles.length-1];
-        if(lastArticle.getBoundingClientRect().bottom < 5000){       
+        if(lastArticle.getBoundingClientRect().bottom < 10000){       
             return true;
         }else{
             return false;
