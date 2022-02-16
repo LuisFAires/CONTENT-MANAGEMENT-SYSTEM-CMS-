@@ -60,12 +60,12 @@ if (feed != null) {
         requestSearch(params.get("search"));
     } else {
         requestFeed();
-        window.addEventListener("scroll", () => {
-            if (isItEnding() === true && waitingResponse === false) {
-                requestFeed();
-            }
-        });
-    } 
+    }
+    window.addEventListener("scroll", () => {
+        if (isItEnding() === true && waitingResponse === false) {
+            requestFeed();
+        }
+    });
 }else{
     if(row.cor1 != undefined && (window.location.href.indexOf("/mensagem.php") != -1) || window.location.href.indexOf("/preview.php") != -1){
         buildArticle();
