@@ -51,21 +51,21 @@ function setCookie(cname, cvalue, exdays) {
 
 
 //VERIFICA SE O USÁRIO ESTÁ NA PÁGINA PRINCIPAL
-var principal = document.getElementById("principal");
-if(principal != null){
+var feed = document.getElementById("feed");
+if (feed != null) {
     var feedIndex = 0;
     var waitingResponse;
     const params = new URLSearchParams(window.location.search);
-    if(params.get('search') != null){
-        requestSearch(params.get('search'));
-    }else{
+    if (params.get("search") != null) {
+        requestSearch(params.get("search"));
+    } else {
         requestFeed();
-    }
-    window.addEventListener('scroll', () => {
-        if(isItEnding() === true && waitingResponse === false){
-            requestFeed();
-        }
-    });
+        window.addEventListener("scroll", () => {
+            if (isItEnding() === true && waitingResponse === false) {
+                requestFeed();
+            }
+        });
+    } 
 }else{
     if(row.cor1 != undefined && (window.location.href.indexOf("/mensagem.php") != -1) || window.location.href.indexOf("/preview.php") != -1){
         buildArticle();
@@ -77,11 +77,12 @@ async function requestSearch(search){
     let req = await fetch("/search.php",  {method: "POST", headers: {'Content-Type': 'application/json;charset=utf-8'}, body: search });
     let res = await req.text();
     if(res == ""){
-        principal.innerHTML = principal.innerHTML + '<br><span class="padding2">Nenhum resultado encontrado para "'+search+'"</span><br><br>';
+        feed.innerHTML = feed.innerHTML + '<br><span class="padding2">Nenhum resultado encontrado para "'+search+'"</span><br><br>';
     }else{
-        principal.innerHTML = principal.innerHTML + '<br><span class="padding2">'+JSON.parse(res).length+' resultado(s) encontrados para "'+search+'"</span><br><br>'
+        res = JSON.parse(res);
+        feed.innerHTML = feed.innerHTML + '<br><span class="padding2">'+res.length+' resultado(s) encontrados para "'+search+'"</span><br><br>'
+        buildFeed(res);
     }
-    buildFeed(JSON.parse(res));
     requestFeed();
 }
 
@@ -90,107 +91,114 @@ async function requestFeed(){
     let req = await fetch("/feed.php",  {method: "POST", headers: {'Content-Type': 'application/json;charset=utf-8'}, body: feedIndex});
     let res = await req.text();
     if(feedIndex == 0){
-        principal.innerHTML = principal.innerHTML + '<br><span class="padding2">Destaques da última semana.</span><br><br>';
+        feed.innerHTML = feed.innerHTML + '<br><span class="padding2">Destaques da última semana.</span><br><br>';
     }
-    buildFeed(JSON.parse(res));
-    feedIndex++;
-    waitingResponse = false;
+    if(res != ""){
+        buildFeed(JSON.parse(res));
+        feedIndex++;
+        waitingResponse = false;
+    }
 }
 
-function buildFeed(res){
-    if(window.location.href.indexOf("/admin") == -1) {principal.innerHTML = principal.innerHTML + "<div style='text-align: center'>"+ad+"</div>"}
-    for(let article of res){
-        let url  = "https://"+window.location.hostname+"/mensagem.php?id="+article.id+"&titulo="+article.titulo;
-        let href = "./mensagem.php?id="+article.id+"&titulo="+encodeURI(article.titulo);
+function buildFeed(res) {
+    if (window.location.href.indexOf("/admin") == -1) {
+        feed.innerHTML = feed.innerHTML + "<div style='text-align: center'>" + ad + "</div>";
+    }
+    for (let article of res) {
+        let url =
+            "https://" + window.location.hostname + "/mensagem.php?id=" + article.id + "&titulo=" + article.titulo;
+        let href = "./mensagem.php?id=" + article.id + "&titulo=" + encodeURI(article.titulo);
         let color_inverse = color_inversor(article.cor1);
         let whats = geraWhats(url);
         let face = geraFace(url);
         let link = geraLink(url, article.titulo);
         let codeHTML = "";
-        codeHTML = codeHTML +
-        "<article class='bigFont bold borderRadius round' data-style='color:"+article.cor1+";background-color:"+color_inverse+";background-image: url(/imgbg/"+article.imgbg+");'>"+
-            "<div class='padding2 roundmask borderRadius mask'>"+
-                "<a href='"+href+"'>"+
-                    "<header>"+
-                        "<h2 class='margin0 firstHalfRound halfRound inlineBlock bigFont' style='color:"+article.cor1+"'>"+article.titulo+"</h2>";
-                        if(article.img != ""){
-                            codeHTML = codeHTML +
-                            "<div class='secondHalfRound halfRound float'>"+
-                                "<img data-src='/img/"+article.img+"' alt='"+article.titulo+"' class='resultIcon height100 float'>"+
-                            "</div>";
-                        }
-                        codeHTML = codeHTML +
-                "</header>"+
-                "<p class='msg magin2 bigFont bold' style='color:"+article.cor1+";'>"+article.texto+"</p>"+
-                "</a>";
-                if(window.location.href.indexOf("/admin") == -1){
-                    codeHTML = codeHTML +
-                    "<div>"+
-                        "<a href='"+whats+"'>"+
-                            "<div class='smallShareButton padding10 inlineBlock borderRadius whatsColor'>"+
-                                "<img data-src='/icon/whats.webp' alt='WhatsApp' class='height100'>"+
-                            "</div>"+
-                        "</a>"+
-                        " <a href='"+face+"'>"+
-                            "<div class='smallShareButton padding10 inlineBlock borderRadius faceColor'>"+
-                                "<img data-src='/icon/face.webp' alt='Facebook' class='height100'>"+
-                            "</div>"+
-                        "</a>"+
-                        " <div class='smallShareButton padding10 inlineBlock borderRadius backgroundWhite' onclick='"+link+"'>"+
-                            "<img data-src='/icon/link.webp' alt='Outras redes' class='height100'>"+
-                        "</div>"+
-                    "</div>";
-                }
-                codeHTML = codeHTML +
-                "<span class='counter float'></span>"+
-            "</div>"+
-        "</article>";
+        codeHTML += `<article class="bigFont bold borderRadius round" data-style="color:${article.cor1};background-color:${color_inverse};background-image: url(/imgbg/${article.imgbg});">
+                <div class="padding2 roundmask borderRadius mask">
+                    <a href="${href}">
+                        <header>
+                            <h2 class="margin0 firstHalfRound halfRound inlineBlock bigFont" style="color:${article.cor1}">${article.titulo}</h2>`;
+        if (article.img != "") {
+            codeHTML += `<div class="secondHalfRound halfRound float">
+                    <img data-src="/img/${article.img}" alt="${article.titulo}" class="resultIcon height100 float">
+                </div>`;
+        }
+        codeHTML += `</header>
+                <p class="msg magin2 bigFont bold" style="color:${article.cor1};">
+                    ${article.texto}
+                </p>
+            </a>`;
+        if (window.location.href.indexOf("/admin") == -1) {
+            codeHTML += `<div>
+                    <a href="${whats}">
+                        <div class="smallShareButton padding10 inlineBlock borderRadius whatsColor">
+                            <img data-src="/icon/whats.webp" alt="WhatsApp" class="height100">
+                        </div>
+                    </a>
+                    <a href="${face}">
+                        <div class="smallShareButton padding10 inlineBlock borderRadius faceColor">
+                            <img data-src="/icon/face.webp" alt="Facebook" class="height100">
+                        </div>
+                    </a>
+                    <div class="smallShareButton padding10 inlineBlock borderRadius backgroundWhite" onclick='${link}'>
+                        <img data-src="/icon/link.webp" alt="Outras redes" class="height100">
+                    </div>
+                </div>`;
+        }
+        codeHTML += "<span class='counter float'></span></div></article>";
 
-        principal.innerHTML = principal.innerHTML + codeHTML;
+        feed.innerHTML = feed.innerHTML + codeHTML;
         ativaNoScroll();
-    } 
-    if(ad != "" && window.location.href.indexOf("/admin") == -1){
+    }
+    if (ad != "" && window.location.href.indexOf("/admin") == -1) {
         (adsbygoogle = window.adsbygoogle || []).push({});
     }
 }
 
-function buildArticle(){
+function buildArticle() {
     let color_inverse = color_inversor(row.cor1);
     let url = window.location.href;
-    let article = document.getElementsByTagName('article')[0];
+    let article = document.getElementsByTagName("article")[0];
     article.style.backgroundColor = color_inverse;
-    article.style.backgroundImage = "url(/imgbg/"+row.imgbg+")";
+    article.style.backgroundImage = "url(/imgbg/" + row.imgbg + ")";
     article.style.backgroundSize = "cover";
     article.style.backgroundAttachment = "fixed";
-    let codeHTML = 
-    '<div class="mask center">'+
-        '<br>'+
-        '<h1 class="msg magin2 bigFont bold" style="color: '+row.cor2+'">'+row.titulo+'</h1>'+
-        '<br>';
-        if(article.img != ""){ 
-            codeHTML = codeHTML + '<img class="mainImg" data-src="/img/'+row.img+'" alt="'+row.titulo+'">';
-        }
-        codeHTML = codeHTML + '<br>';
-        if(ad != "" && window.location.href.indexOf("/admin") == -1){
-            codeHTML = codeHTML + "<br><div class='center'>"+ad+"</div><br>";
-        }
-        codeHTML = codeHTML + "<br>"+
-        '<p class="msg magin2 bigFont bold" style="color: '+row.cor1+';">'+row.texto+'</p>'+
-        '<br>';
-        if(window.location.href.indexOf("/admin") == -1){
-            codeHTML = codeHTML + '<div>'+
-            ' <a id="whats" href="'+geraWhats(url)+'"> <div class="bigShareButton borderRadius smallFont inlineBlock whatsColor"><img data-src="/icon/whats.webp" alt="WhatsApp" class="bigShareButtonIcon"><br>WhatsApp</div></a> '+
-            ' <a id="face" href="'+geraFace(url)+'"> <div class="bigShareButton borderRadius smallFont inlineBlock faceColor"><img data-src="/icon/face.webp" alt="Facebook" class="bigShareButtonIcon"><br>Facebook</div></a> '+
-            "<div id='link' class='bigShareButton borderRadius smallFont inlineBlock backgroundWhite' onclick='"+geraLink(url, row.titulo)+"'><img data-src='/icon/link.webp' alt='Outras redes' class='bigShareButtonIcon'><br>Link</div>"+
-            '</div>'+
-            '<div>'+
-            '<p class="msg magin2 bigFont bold" style="color: '+row.cor1+';"> Veja mais em: <a  href="/" style="color: '+row.cor2+';">'+window.location.hostname+'</a></p><br>'+
-            '</div>'+
-            '</div>';
-        }
+    let codeHTML = `<div class="mask center">
+            <br>
+            <h1 class="msg magin2 bigFont bold" style="color:${row.cor2}">${row.titulo}</h1>
+            <br>`;
+    if (article.img != "") {
+        codeHTML += `<img class="mainImg" data-src="/img/${row.img}" alt="${row.titulo}">`;
+    }
+    codeHTML += `<br>`;
+    if (ad != "" && window.location.href.indexOf("/admin") == -1) {
+        codeHTML += `<br><div class='center'>${ad}</div><br>`;
+    }
+    codeHTML += `<br>
+            <p class="msg magin2 bigFont bold" style="color:${row.cor1};">${row.texto}</p>
+        <br>`;
+    if (window.location.href.indexOf("/admin") == -1) {
+        codeHTML += `<div>
+            <a id="whats" href="${geraWhats(
+                url
+            )}"><div class="bigShareButton borderRadius smallFont inlineBlock whatsColor"><img data-src="/icon/whats.webp" alt="WhatsApp" class="bigShareButtonIcon"><br>WhatsApp</div></a>
+            <a id="face" href="${geraFace(
+                url
+            )}"> <div class="bigShareButton borderRadius smallFont inlineBlock faceColor"><img data-src="/icon/face.webp" alt="Facebook" class="bigShareButtonIcon"><br>Facebook</div></a>
+            <div id='link' class='bigShareButton borderRadius smallFont inlineBlock backgroundWhite' onclick='${geraLink(
+                url,
+                row.titulo
+            )}'><img data-src='/icon/link.webp' alt='Outras redes' class='bigShareButtonIcon'><br>Link</div>
+        </div>
+        <div>
+            <p class="msg magin2 bigFont bold" style="color:${
+                row.cor1
+            };">Veja mais em: <a  href="/" style="color:${row.cor2};">${window.location.hostname}</a></p><br></div>
+        </div>`;
+    }
     article.innerHTML = codeHTML;
     ativaNoScroll();
-    if(ad != "" && window.location.href.indexOf("/admin") == -1){
+    if (ad != "" && window.location.href.indexOf("/admin") == -1) {
         (adsbygoogle = window.adsbygoogle || []).push({});
     }
 }

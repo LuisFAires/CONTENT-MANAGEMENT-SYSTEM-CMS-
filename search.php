@@ -9,5 +9,6 @@
     while($row = mysqli_fetch_assoc($result)){
         $rows[] = $row;
     }
-
-    echo json_encode($rows);
+    if(isset($rows)){
+        echo json_encode($rows);
+    }

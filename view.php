@@ -5,7 +5,7 @@
     
 </article>
 <script>
-    let row = <?php echo json_encode($rows[0]) ?>;
+    let row = <?php echo json_encode($post[0]) ?>;
 </script>
 <?php
     require_once "footer.php";

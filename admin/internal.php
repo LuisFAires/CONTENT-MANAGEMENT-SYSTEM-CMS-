@@ -56,7 +56,7 @@
         <input class="searchInput width100 bigFont" type="search" name="search" placeholder="Pesquisar">
         <button class="searchButton width100 bigFont" type="submit">&#128269</button>
     </form>
-    <div id="principal">
+    <div id="feed">
     </div>
     <script>
     var msg = document.getElementsByClassName("msg");

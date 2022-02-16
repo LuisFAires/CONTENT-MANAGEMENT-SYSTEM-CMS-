@@ -9,7 +9,7 @@
     $result = mysqli_query($connection, $sql);
     if(mysqli_num_rows($result) == 1){
         while($row = mysqli_fetch_assoc($result)){
-            $rows[] = $row;
+            $post[] = $row;
         }
     }else{
         //SE A MENSAGEM NÃO FOR ENCONTRADA REDIRECIONA O USUÁRIO PARA PÁGINA INICIAL
