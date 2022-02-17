@@ -56,7 +56,7 @@ if (feed != null) {
     var feedIndex = 0;
     var waitingResponse;
     const params = new URLSearchParams(window.location.search);
-    if (params.get("search") != null) {
+    if (params.get("search") != null ) {
         requestSearch(params.get("search"));
     } else {
         requestFeed();
@@ -104,6 +104,7 @@ function buildFeed(res) {
     if (window.location.href.indexOf("/admin") == -1) {
         feed.innerHTML = feed.innerHTML + "<div style='text-align: center'>" + ad + "</div>";
     }
+    let codeHTML = "";
     for (let article of res) {
         let url =
             "https://" + window.location.hostname + "/mensagem.php?id=" + article.id + "&titulo=" + article.titulo;
@@ -111,8 +112,7 @@ function buildFeed(res) {
         let color_inverse = color_inversor(article.cor1);
         let whats = geraWhats(url);
         let face = geraFace(url);
-        let link = geraLink(url, article.titulo);
-        let codeHTML = "";
+        let link = geraLink(url, article.titulo);      
         codeHTML += `<article class="bigFont bold borderRadius round" data-style="color:${article.cor1};background-color:${color_inverse};background-image: url(/imgbg/${article.imgbg});">
                 <div class="padding2 roundmask borderRadius mask">
                     <a href="${href}">
@@ -145,11 +145,10 @@ function buildFeed(res) {
                     </div>
                 </div>`;
         }
-        codeHTML += "<span class='counter float'></span></div></article>";
-
-        feed.innerHTML = feed.innerHTML + codeHTML;
-        ativaNoScroll();
+        codeHTML += "<span class='counter float'></span></div></article>";  
     }
+    feed.innerHTML = feed.innerHTML + codeHTML;
+    ativaNoScroll();
     if (ad != "" && window.location.href.indexOf("/admin") == -1) {
         (adsbygoogle = window.adsbygoogle || []).push({});
     }
