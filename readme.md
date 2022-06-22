@@ -5,10 +5,6 @@ Você pode ver uma demonstração do sistema no link abaixo:
 
 [Exemplo CMS](https://exemplocms.000webhostapp.com/)
 
-Este projeto foi utilizado para criação do site:
-
-[universodasmensagens.com](https://universodasmensagens.com/)
-
 ## INSLATAÇÃO
 
 1. Copie todos os arquivos para a pasta raiz do servidor.
